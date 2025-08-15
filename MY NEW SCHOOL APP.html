@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Student Performance Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .app-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .app-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #4CAF50, #2196F3, #9C27B0);
+        }
+        
+        .app-header {
+            margin-bottom: 30px;
+        }
+        
+        .app-title {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .app-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #4CAF50, #2196F3);
+            border-radius: 2px;
+        }
+        
+        .app-subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            margin-top: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .form-label {
+            display: block;
+            color: #2c3e50;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 35px;
+        }
+        
+        .form-label i {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3498db;
+            font-size: 1.2rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3498db;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .form-input::placeholder {
+            color: #bdc3c7;
+        }
+        
+        .calculate-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 15px rgba(52, 152, 219, 0.4);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin: 25px 0;
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(52, 152, 219, 0.6);
+        }
+        
+        .calculate-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .result-container {
+            background: linear-gradient(135deg, #f5f7fa, #e4e7eb);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .result-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .result-title {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .result-value {
+            color: #3498db;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 15px 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-description {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            margin-top: 15px;
+            max-width: 80%;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .icon-container {
+            position: absolute;
+            font-size: 5rem;
+            opacity: 0.1;
+            color: #3498db;
+            z-index: 0;
+        }
+        
+        .icon-1 {
+            top: 20px;
+            right: 20px;
+        }
+        
+        .icon-2 {
+            bottom: 20px;
+            left: 20px;
+        }
+        
+        .info-panel {
+            background: rgba(52, 152, 219, 0.1);
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .info-title {
+            color: #2c3e50;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .info-text {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 600px) {
+            .app-container {
+                padding: 30px 20px;
+            }
+            
+            .app-title {
+                font-size: 2rem;
+            }
+            
+            .form-input {
+                padding: 14px 18px;
+            }
+            
+            .calculate-btn {
+                padding: 14px 35px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="icon-container icon-1">
+            <i class="fas fa-user-md"></i>
+        </div>
+        <div class="icon-container icon-2">
+            <i class="fas fa-graduation-cap"></i>
+        </div>
+        
+        <div class="app-header">
+            <h1 class="app-title">Medical Student Performance</h1>
+            <p class="app-subtitle">Calculate the number of medical students who passed JAMB</p>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label" for="students-count">
+                <i class="fas fa-users"></i>
+                Number of Medical Students
+            </label>
+            <input type="number" id="students-count" class="form-input" placeholder="Enter total number of medical students" min="1">
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label" for="pass-percentage">
+                <i class="fas fa-chart-line"></i>
+                Percentage of Passed Students
+            </label>
+            <input type="number" id="pass-percentage" class="form-input" placeholder="Enter pass percentage" min="0" max="100" value="3">
+        </div>
+        
+        <button id="calculate-btn" class="calculate-btn">
+            <i class="fas fa-calculator"></i> Calculate Results
+        </button>
+        
+        <div id="result-container" class="result-container hidden">
+            <h3 class="result-title">Calculation Results</h3>
+            <div id="result-value" class="result-value">0</div>
+            <p id="result-description" class="result-description">Medical students passed JAMB</p>
+        </div>
+        
+        <div class="info-panel">
+            <h4 class="info-title"><i class="fas fa-info-circle"></i> How It Works</h4>
+            <p class="info-text">
+                This calculator determines the number of medical students who passed JAMB based on the total number of students and the pass percentage. Simply enter the total number of medical students and the percentage of students who passed, then click "Calculate Results" to see the outcome.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const studentsCountInput = document.getElementById('students-count');
+            const passPercentageInput = document.getElementById('pass-percentage');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const resultContainer = document.getElementById('result-container');
+            const resultValue = document.getElementById('result-value');
+            const resultDescription = document.getElementById('result-description');
+            
+            // Function to calculate results
+            function calculateResults() {
+                const studentsCount = parseInt(studentsCountInput.value);
+                const passPercentage = parseFloat(passPercentageInput.value);
+                
+                // Validate inputs
+                if (isNaN(studentsCount) || studentsCount <= 0) {
+                    showNotification('Please enter a valid number of students');
+                    return;
+                }
+                
+                if (isNaN(passPercentage) || passPercentage < 0 || passPercentage > 100) {
+                    showNotification('Please enter a valid percentage (0-100)');
+                    return;
+                }
+                
+                // Calculate passed students
+                const passedStudents = (studentsCount * passPercentage) / 100;
+                const roundedPassedStudents = Math.round(passedStudents);
+                
+                // Display results
+                resultValue.textContent = roundedPassedStudents;
+                resultDescription.textContent = `Medical students passed JAMB (${passPercentage}% of ${studentsCount})`;
+                resultContainer.classList.remove('hidden');
+                
+                // Add animation
+                resultValue.style.animation = 'none';
+                setTimeout(() => {
+                    resultValue.style.animation = 'fadeIn 1s ease';
+                }, 10);
+            }
+            
+            // Function to show notification
+            function showNotification(message) {
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.style.position = 'fixed';
+                notification.style.top = '20px';
+                notification.style.left = '50%';
+                notification.style.transform = 'translateX(-50%)';
+                notification.style.backgroundColor = '#e74c3c';
+                notification.style.color = 'white';
+                notification.style.padding = '15px 30px';
+                notification.style.borderRadius = '50px';
+                notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
+                notification.style.zIndex = '1000';
+                notification.style.fontWeight = '600';
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 500);
+                }, 3000);
+            }
+            
+            // Event listeners
+            calculateBtn.addEventListener('click', calculateResults);
+            
+            // Allow Enter key to trigger calculation
+            studentsCountInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    passPercentageInput.focus();
+                }
+            });
+            
+            passPercentageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    calculateResults();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
