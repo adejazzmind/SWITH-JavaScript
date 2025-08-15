@@ -1,0 +1,1 @@
+JavaScript is a high-level, interpreted programming language primarily used for creating interactive and dynamic content on the web. It is one of the three core technologies of the World Wide Web, alongside HTML for structuring content and CSS for styling.
